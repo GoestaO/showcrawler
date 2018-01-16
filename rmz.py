@@ -13,11 +13,12 @@ if __name__ == '__main__':
     d = feedparser.parse('http://rmz.cr/feed')
     download_folder = config.get('downloadfolder')
     quality = config.get('quality')
+    shows = config.get('shows')
     for entry in d['entries']:
-        myshow = 'Loudermilk'
-        title = entry['title']
-        link = entry['link']
-        if quality in title and myshow in title:
-            create_crawljob_and_upload(jobname=myshow, link=link, download_folder=download_folder)
+        for show in shows:
+            title = entry['title']
+            link = entry['link']
+            if quality in title and show in title:
+                create_crawljob_and_upload(jobname=show, link=link, download_folder=download_folder)
 
 

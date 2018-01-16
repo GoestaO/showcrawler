@@ -6,12 +6,6 @@ import urllib
 import requests
 from utilities import create_crawljob_and_upload
 
-# URL = 'http://dokujunkies.org/dokus/geschichtepolitik/feed'
-# QUALITY = '720p'
-# HOSTER = 'uploaded'
-# # blacklist = ['Papst', 'Mittelalter']
-# TEST_URL = 'http://dokujunkies.org/dokus/geschichtepolitik/zweiterweltkrieg/mengele-jagd-nach-dem-todesengel-hdtv-sd720p1080p.html'
-
 config = read_config(path_to_file="config.yml").get('Dokujunkies_Geschichtepolitik')
 
 def get_raw_urls():
