@@ -1,0 +1,8 @@
+packageName = House Hunters Renovation
+text = http://rmz.cr/release/house-hunters-renovation-s12e10-engaged-in-a-renovation-720p-hdtv-x264-crimson
+downloadFolder = /home/goesta
+enabled = true
+autoStart = TRUE
+extractAfterDownload = TRUE
+forcedStart = TRUE
+autoConfirm = TRUE

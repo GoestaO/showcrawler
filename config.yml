@@ -1,0 +1,16 @@
+Dokujunkies_Geschichtepolitik:
+    feed: "http://dokujunkies.org/dokus/geschichtepolitik/feed"
+    blacklist:
+      - Papst
+      - Mittelalter
+    quality: 720p
+    downloadfolder: /share/Web/temp/Dokus
+    hoster: uploaded
+RMZ_Shows:
+    feed: "http://rmz.cr/feed"
+    shows:
+      - Show1
+      - Show2
+      - Show3
+    quality: 720p
+    downloadfolder: /share/Web/temp/TV-Shows
