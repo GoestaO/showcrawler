@@ -6,15 +6,11 @@ import urllib
 import requests
 from utilities import create_crawljob_and_upload
 
-# URL = 'http://dokujunkies.org/dokus/geschichtepolitik/feed'
-# QUALITY = '720p'
-# HOSTER = 'uploaded'
-# # blacklist = ['Papst', 'Mittelalter']
-# TEST_URL = 'http://dokujunkies.org/dokus/geschichtepolitik/zweiterweltkrieg/mengele-jagd-nach-dem-todesengel-hdtv-sd720p1080p.html'
-
 config = read_config(path_to_file="config.yml").get('Dokujunkies_Geschichtepolitik')
 
+
 def get_raw_urls():
+    """ Returns a list of tuples. A tuple contains the link and the title of a documentary that should be downloaded."""
     linklist = []
     feed_url = config.get('feed')
     d = feedparser.parse(feed_url)
@@ -58,5 +54,5 @@ if __name__ == '__main__':
         soup = beautiful_soup(raw_url[0])
         downloadable_link = get_download_link(soup)
         download_folder = config.get('downloadfolder')
-        create_crawljob_and_upload(raw_url[1], downloadable_link, download_folder)
-
+        job_name = raw_url[1]
+        create_crawljob_and_upload(jobname=job_name, link=downloadable_link, download_folder=download_folder)

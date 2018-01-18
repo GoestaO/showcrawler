@@ -5,10 +5,7 @@ from ftplib import FTP
 import os
 
 home = str(Path.home())
-TEMP_FOLDER = "{}/folderwatch".format(home)
-
-
-
+TEMP_FOLDER = "folderwatch"
 
 
 def generate_absolute_path_mediaserver(folder):
@@ -63,3 +60,10 @@ def push_files_to_ftp(folder: str, filelist: list):
 
     # Closes the connection
     srv.close()
+
+
+def document_download(name: str):
+    with open("history.txt", "a") as f:
+        f.write(name + "\n")
+
+
