@@ -3,6 +3,8 @@ import yaml
 import pysftp
 from ftplib import FTP
 import os
+import requests
+from bs4 import BeautifulSoup
 
 home = str(Path.home())
 TEMP_FOLDER = "folderwatch"
@@ -66,4 +68,15 @@ def document_download(name: str):
     with open("history.txt", "a") as f:
         f.write(name + "\n")
 
+
+def is_in_download_history(title):
+    """Checks, if a documentary has been already downloaded by checking the entries in history.txt file"""
+    with open("history.txt", "r") as f:
+        content = f.read().splitlines()
+    return title in content
+
+def beautiful_soup(raw_url):
+    page = requests.get(raw_url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    return soup
 

@@ -1,11 +1,6 @@
 import feedparser
-import pprint
+from utilities import create_crawljob_and_upload, document_download, is_in_download_history, beautiful_soup
 from utilities import read_config
-from bs4 import BeautifulSoup
-import urllib
-import requests
-from utilities import create_crawljob_and_upload
-
 config = read_config(path_to_file="config.yml").get('Dokujunkies_Geschichtepolitik')
 
 
@@ -18,7 +13,8 @@ def get_raw_urls():
         if not is_blacklisted(entry):
             link = entry['link']
             title = entry['title'].split(" – ")[0] if len(entry['title'].split(" – ")[0]) > 0 else 'title'
-            linklist.append((link, title))
+            if not is_in_download_history(title):
+                linklist.append((link, title))
     return linklist
 
 
@@ -42,10 +38,7 @@ def get_download_link(soup):
                     return dl['href']
 
 
-def beautiful_soup(raw_url):
-    page = requests.get(raw_url)
-    soup = BeautifulSoup(page.content, 'html.parser')
-    return soup
+
 
 
 if __name__ == '__main__':
@@ -54,5 +47,6 @@ if __name__ == '__main__':
         soup = beautiful_soup(raw_url[0])
         downloadable_link = get_download_link(soup)
         download_folder = config.get('downloadfolder')
-        job_name = raw_url[1]
-        create_crawljob_and_upload(jobname=job_name, link=downloadable_link, download_folder=download_folder)
+        title = raw_url[1]
+        create_crawljob_and_upload(jobname=title, link=downloadable_link, download_folder=download_folder)
+        document_download(title)
