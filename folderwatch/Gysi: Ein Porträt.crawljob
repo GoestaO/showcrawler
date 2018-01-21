@@ -1,0 +1,6 @@
+text = http://download.serienjunkies.org/f-856537de6f51132e/ul_gysi-ein-portraet-720p.html
+downloadFolder = /share/Web/temp/Dokus
+enabled = TRUE
+autoStart = TRUE
+forcedStart = TRUE
+autoConfirm = TRUE

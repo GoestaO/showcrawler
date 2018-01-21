@@ -1,8 +1,0 @@
-text=http://rmz.cr/release/loudermilk-s01e01-a-girl-in-trouble-is-a-temporary-thing-720p-webrip-hevc-x265-rmteam
-packageName=The_Mumy
-downloadFolder=/home/goesta
-enabled=true
-autoStart=TRUE
-extractAfterDownload=TRUE
-forcedStart=TRUE
-autoConfirm=TRUE

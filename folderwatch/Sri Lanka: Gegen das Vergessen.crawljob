@@ -1,0 +1,6 @@
+text = http://download.serienjunkies.org/f-bbd3a8cf2b48374b/ul_sri-lanka-vergessen-720p.html
+downloadFolder = /share/Web/temp/Dokus
+enabled = TRUE
+autoStart = TRUE
+forcedStart = TRUE
+autoConfirm = TRUE

@@ -1,0 +1,6 @@
+text = http://download.serienjunkies.org/f-4542c3079b4581bd/ul_der-streitwagen-der-zhou-720p.html
+downloadFolder = /share/Web/temp/Dokus
+enabled = TRUE
+autoStart = TRUE
+forcedStart = TRUE
+autoConfirm = TRUE

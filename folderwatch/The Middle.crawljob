@@ -1,0 +1,6 @@
+text = http://rmz.cr/release/the-middle-s09e13-internal-720p-web-x264-bamboozle
+downloadFolder = /share/Web/temp/TV-Shows
+enabled = TRUE
+autoStart = TRUE
+forcedStart = TRUE
+autoConfirm = TRUE

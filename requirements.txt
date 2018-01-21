@@ -1,3 +1,5 @@
-yaml
-ftplib
-beautifulsoup4
+bs4
+pyyaml
+pysftp
+requests
+guessit
