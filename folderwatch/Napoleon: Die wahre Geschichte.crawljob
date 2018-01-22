@@ -1,0 +1,6 @@
+text = http://download.serienjunkies.org/f-5c893061a8b0ea7e/ul_napoleon-wahre-geschichte-e01-720p.html
+downloadFolder = /share/Web/temp/Dokus
+enabled = TRUE
+autoStart = TRUE
+forcedStart = TRUE
+autoConfirm = TRUE

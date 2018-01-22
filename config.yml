@@ -9,8 +9,7 @@ Dokujunkies_Geschichtepolitik:
 RMZ_Shows:
     feed: "http://rmz.cr/feed"
     shows:
-      - The Middle
-      - The Mick
-      - Lethal Weapon
+      - Wilderness Vet
+      - The Voyager with Josh Garcia
     quality: 720p
     downloadfolder: /share/Web/temp/TV-Shows

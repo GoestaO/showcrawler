@@ -1,0 +1,5 @@
+ftp_connection:
+  host: xxx.xx.xx.x
+  username: xxxx
+  password: xxxxxxx
+  folderwatch: /temp/folderwatch

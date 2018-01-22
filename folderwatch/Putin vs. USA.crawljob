@@ -1,0 +1,6 @@
+text = http://download.serienjunkies.org/f-acf66bdec737108b/ul_putin-versus-usa-e01-720p.html
+downloadFolder = /share/Web/temp/Dokus
+enabled = TRUE
+autoStart = TRUE
+forcedStart = TRUE
+autoConfirm = TRUE

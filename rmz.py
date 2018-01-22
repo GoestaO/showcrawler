@@ -1,13 +1,14 @@
 import feedparser
 import pprint
-from utilities import create_crawljob_and_upload, read_config
+from utilities import create_crawljob_and_upload, read_config, get_show_information
+from db import persist_download, download_exists
 from pathlib import Path
+from guessit import guessit
+
 home = str(Path.home())
 WATCHED_FOLDER = "folderwatch"
 
 config = read_config(path_to_file="config.yml").get('RMZ_Shows')
-
-
 
 if __name__ == '__main__':
     d = feedparser.parse('http://rmz.cr/feed')
@@ -16,9 +17,17 @@ if __name__ == '__main__':
     shows = config.get('shows')
     for entry in d['entries']:
         for show in shows:
-            title = entry['title']
+            raw_title = entry['title']
             link = entry['link']
-            if quality in title and show in title:
-                create_crawljob_and_upload(jobname=show, link=link, download_folder=download_folder)
-
-
+            show_info = get_show_information(raw_title)
+            if 'title' in show_info and 'season' in show_info and 'episode' in show_info and 'screen_size' in show_info:
+                title = show_info['title']
+                season = show_info['season']
+                episode = show_info['episode']
+                screen_size = show_info['screen_size']
+                if show == title and quality == screen_size and not download_exists(title=title, season=season,
+                                                                                    episode=episode):
+                    # creates crawljob and upload to server
+                    create_crawljob_and_upload(jobname=show, link=link, download_folder=download_folder)
+                    # save download to avoid multiple downloads of the same file
+                    persist_download(title=title, season=season, episode=episode)

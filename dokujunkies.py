@@ -1,6 +1,11 @@
 import feedparser
-from utilities import create_crawljob_and_upload, document_download, is_in_download_history, beautiful_soup
+import pprint
 from utilities import read_config
+from bs4 import BeautifulSoup
+import urllib
+import requests
+from utilities import create_crawljob_and_upload, log_download, already_downloaded
+
 config = read_config(path_to_file="config.yml").get('Dokujunkies_Geschichtepolitik')
 
 
@@ -12,9 +17,10 @@ def get_raw_urls():
     for entry in d['entries']:
         if not is_blacklisted(entry):
             link = entry['link']
+            raw_title = entry['title']
+            print(entry['title'])
             title = entry['title'].split(" – ")[0] if len(entry['title'].split(" – ")[0]) > 0 else 'title'
-            if not is_in_download_history(title):
-                linklist.append((link, title))
+            linklist.append((link, title))
     return linklist
 
 
@@ -24,6 +30,10 @@ def is_blacklisted(entry):
         if tag['term'] in blacklist:
             return True
     return False
+
+
+def sanitize_raw_title(raw_title):
+    return raw_title.replace("–", "")
 
 
 def get_download_link(soup):
@@ -38,7 +48,10 @@ def get_download_link(soup):
                     return dl['href']
 
 
-
+def beautiful_soup(raw_url):
+    page = requests.get(raw_url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    return soup
 
 
 if __name__ == '__main__':
@@ -48,5 +61,8 @@ if __name__ == '__main__':
         downloadable_link = get_download_link(soup)
         download_folder = config.get('downloadfolder')
         title = raw_url[1]
-        create_crawljob_and_upload(jobname=title, link=downloadable_link, download_folder=download_folder)
-        document_download(title)
+        downloaded = already_downloaded(title)
+        print("{} already downloaded: {}".format(title, downloaded))
+        if not already_downloaded(title):
+            create_crawljob_and_upload(jobname=title, link=downloadable_link, download_folder=download_folder)
+            log_download(title)

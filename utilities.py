@@ -3,8 +3,7 @@ import yaml
 import pysftp
 from ftplib import FTP
 import os
-import requests
-from bs4 import BeautifulSoup
+from guessit import guessit
 
 home = str(Path.home())
 TEMP_FOLDER = "folderwatch"
@@ -28,10 +27,8 @@ def create_crawljob_and_upload(jobname: str, link: str, download_folder):
         f.write("autoStart = TRUE\n")
         f.write("forcedStart = TRUE\n")
         f.write("autoConfirm = TRUE\n")
-
         f.close()
     push_file_to_ftp(f)
-    # os.remove(f.name)
 
 
 def read_config(path_to_file: str):
@@ -53,6 +50,7 @@ def push_file_to_ftp(file):
     f.close()
     ftp.quit()
 
+
 def push_files_to_ftp(folder: str, filelist: list):
     connection = read_config("ftp.yml")
     srv = pysftp.Connection(host = connection.get('host'), username=connection.get('username'), password=connection.get('password'))
@@ -64,19 +62,18 @@ def push_files_to_ftp(folder: str, filelist: list):
     srv.close()
 
 
-def document_download(name: str):
+def log_download(name: str):
     with open("history.txt", "a") as f:
         f.write(name + "\n")
 
 
-def is_in_download_history(title):
-    """Checks, if a documentary has been already downloaded by checking the entries in history.txt file"""
-    with open("history.txt", "r") as f:
-        content = f.read().splitlines()
-    return title in content
+def already_downloaded(title):
+    entries = open("history.txt", "r").read().splitlines()
+    return title in entries
 
-def beautiful_soup(raw_url):
-    page = requests.get(raw_url)
-    soup = BeautifulSoup(page.content, 'html.parser')
-    return soup
+
+def get_show_information(title):
+    return guessit(title)
+
+
 
