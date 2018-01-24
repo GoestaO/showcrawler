@@ -1,13 +1,13 @@
 import feedparser
-import pprint
-from utilities import read_config
+from db import download_exists, persist_download
+from utilities import read_config, get_show_information
 from bs4 import BeautifulSoup
 import urllib
 import requests
 from utilities import create_crawljob_and_upload, log_download, already_downloaded
 
 config = read_config(path_to_file="config.yml").get('Dokujunkies_Geschichtepolitik')
-
+link_list = []
 
 def get_raw_urls():
     """ Returns a list of tuples. A tuple contains the link and the title of a documentary that should be downloaded."""
@@ -18,7 +18,6 @@ def get_raw_urls():
         if not is_blacklisted(entry):
             link = entry['link']
             raw_title = entry['title']
-            print(entry['title'])
             title = entry['title'].split(" – ")[0] if len(entry['title'].split(" – ")[0]) > 0 else 'title'
             linklist.append((link, title))
     return linklist
@@ -32,9 +31,12 @@ def is_blacklisted(entry):
     return False
 
 
-def sanitize_raw_title(raw_title):
+def sanitize(raw_title):
     return raw_title.replace("–", "")
 
+
+def remove_white_spaces(text):
+    return text.replace(" ", "")
 
 def get_download_link(soup):
     quality = config.get('quality')
@@ -48,6 +50,18 @@ def get_download_link(soup):
                     return dl['href']
 
 
+# Adds the links + show information to the link_list
+def filter_downloads(soup, link_list, quality, hoster):
+    paragraphs = soup.findAll("p")
+    pre_filtered_paragraphs = list(filter(lambda p: quality in p.text and hoster in p.text, paragraphs))
+    for item in pre_filtered_paragraphs:
+        links = item.findAll('a')
+        for link in links:
+            if hoster in link.next_sibling:
+                link_list.append((link['href'], get_show_information(item.text)))
+
+
+# Creates a beautifulsoup object for an url
 def beautiful_soup(raw_url):
     page = requests.get(raw_url)
     soup = BeautifulSoup(page.content, 'html.parser')
@@ -55,14 +69,34 @@ def beautiful_soup(raw_url):
 
 
 if __name__ == '__main__':
+
     raw_urls = get_raw_urls()
+    quality = config.get('quality')
+    hoster = config.get('hoster')
+    download_folder = config.get('downloadfolder')
     for raw_url in raw_urls:
         soup = beautiful_soup(raw_url[0])
-        downloadable_link = get_download_link(soup)
-        download_folder = config.get('downloadfolder')
-        title = raw_url[1]
-        downloaded = already_downloaded(title)
-        print("{} already downloaded: {}".format(title, downloaded))
-        if not already_downloaded(title):
-            create_crawljob_and_upload(jobname=title, link=downloadable_link, download_folder=download_folder)
-            log_download(title)
+        filter_downloads(link_list=link_list, soup=soup, quality=quality, hoster=hoster)
+
+    for entry in link_list:
+        download_link = entry[0]
+        # Remove whitespaces from title
+        title = entry[1]['title']
+        title = remove_white_spaces(title)
+
+        # Fetch season if available, else set it as empty string, remove whitespaces
+        season = remove_white_spaces(str(entry[1]['season'])) if 'season' in entry[1] else ""
+
+        # Fetch episode if available, else set it as empty string, remove whitespaces
+        episode = remove_white_spaces(str(entry[1]['episode'])) if 'episode' in entry[1] else ""
+        # print(episode)
+
+        identifier = "{}S{}E{}".format(title, season, episode)
+        print(identifier, download_exists(title=title, season=season, episode=episode))
+        # if not download_exists(title=title, season=season, episode=episode):
+        #     create_crawljob_and_upload(jobname=identifier, link=download_link, download_folder=download_folder)
+        #     persist_download(title=title, season=season, episode=episode)
+        # else:
+        #     print("{} exists already".format(title))
+    link_list.clear()
+

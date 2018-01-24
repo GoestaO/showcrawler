@@ -11,7 +11,7 @@ DB_FILENAME = 'downloads.db'
 
 def persist_download(title, season, episode):
     conn = sqlite3.connect(DB_FILENAME)
-    identifier = "{}S{}E{}".format(title, str(season), str(episode))
+    identifier = "{}S{}E{}".format(title.replace(" ", ""), str(season).replace(" ", ""), str(episode).replace(" ", ""))
     sql = "INSERT INTO download(identifier, title, season, episode) VALUES ('{}', '{}', '{}', '{}')".format(identifier,
                                                                                                             title,
                                                                                                             season,
@@ -22,7 +22,9 @@ def persist_download(title, season, episode):
 
 
 def download_exists(title: str, season: int, episode: int):
-    identifier = "{}S{}E{}".format(title, str(season), str(episode))
+
+    # Identifier is concatenation of title, season and episode - everything without white space
+    identifier = "{}S{}E{}".format(title.replace(" ", ""), str(season).replace(" ", ""), str(episode).replace(" ", ""))
     conn = sqlite3.connect(DB_FILENAME)
     cursor = conn.cursor()
     sql = "select * from download where identifier = '{}'".format(identifier)

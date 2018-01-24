@@ -1,5 +1,5 @@
 Dokujunkies_Geschichtepolitik:
-    feed: "http://dokujunkies.org/dokus/geschichtepolitik/feed"
+    feed: "http://dokujunkies.org/dokus/geschichtepolitik/moderne-geschichtepolitik-dokus/feed"
     blacklist:
       - Papst
       - Mittelalter
