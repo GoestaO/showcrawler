@@ -9,7 +9,9 @@ from utilities import create_crawljob_and_upload, log_download, already_download
 config = read_config(path_to_file="config.yml").get('Dokujunkies_Geschichtepolitik')
 link_list = []
 
-def get_raw_urls():
+
+# DEPRECATED
+def get_raw_urls_old():
     """ Returns a list of tuples. A tuple contains the link and the title of a documentary that should be downloaded."""
     linklist = []
     feed_url = config.get('feed')
@@ -17,10 +19,19 @@ def get_raw_urls():
     for entry in d['entries']:
         if not is_blacklisted(entry):
             link = entry['link']
-            raw_title = entry['title']
+            # raw_title = entry['title']
             title = entry['title'].split(" – ")[0] if len(entry['title'].split(" – ")[0]) > 0 else 'title'
             linklist.append((link, title))
     return linklist
+
+
+def get_raw_urls():
+    """ Returns a list of tuples. A tuple contains the link and the title of a documentary that should be downloaded."""
+    feed_url = config.get('feed')
+    d = feedparser.parse(feed_url)
+    return list(map(lambda entry: (
+        entry['link'], entry['title'].split(" – ")[0] if len(entry['title'].split(" – ")[0]) > 0 else 'title'),
+                    d['entries']))
 
 
 def is_blacklisted(entry):
@@ -37,6 +48,7 @@ def sanitize(raw_title):
 
 def remove_white_spaces(text):
     return text.replace(" ", "")
+
 
 def get_download_link(soup):
     quality = config.get('quality')
@@ -67,16 +79,15 @@ def beautiful_soup(raw_url):
     soup = BeautifulSoup(page.content, 'html.parser')
     return soup
 
-
-if __name__ == '__main__':
-
+def run():
     raw_urls = get_raw_urls()
     quality = config.get('quality')
     hoster = config.get('hoster')
     download_folder = config.get('downloadfolder')
-    for raw_url in raw_urls:
-        soup = beautiful_soup(raw_url[0])
-        filter_downloads(link_list=link_list, soup=soup, quality=quality, hoster=hoster)
+
+    list(map(lambda x: filter_downloads(link_list=link_list, soup=beautiful_soup(x[0]), quality=quality, hoster=hoster),
+             raw_urls))
+
 
     for entry in link_list:
         download_link = entry[0]
@@ -89,14 +100,17 @@ if __name__ == '__main__':
 
         # Fetch episode if available, else set it as empty string, remove whitespaces
         episode = remove_white_spaces(str(entry[1]['episode'])) if 'episode' in entry[1] else ""
-        # print(episode)
 
         identifier = "{}S{}E{}".format(title, season, episode)
-        print(identifier, download_exists(title=title, season=season, episode=episode))
-        # if not download_exists(title=title, season=season, episode=episode):
-        #     create_crawljob_and_upload(jobname=identifier, link=download_link, download_folder=download_folder)
-        #     persist_download(title=title, season=season, episode=episode)
-        # else:
-        #     print("{} exists already".format(title))
+
+        # if there's no db entry yet, create the crawljob and upload it to the FTP server
+
+        if not download_exists(title=title, season=season, episode=episode):
+            create_crawljob_and_upload(jobname=identifier, link=download_link, download_folder=download_folder)
+            persist_download(title=title, season=season, episode=episode)
+
     link_list.clear()
 
+
+if __name__ == '__main__':
+    run()
