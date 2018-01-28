@@ -4,6 +4,8 @@ import pysftp
 from ftplib import FTP
 import os
 from guessit import guessit
+from bs4 import BeautifulSoup
+import requests
 
 home = str(Path.home())
 TEMP_FOLDER = "folderwatch"
@@ -67,13 +69,14 @@ def log_download(name: str):
         f.write(name + "\n")
 
 
-def already_downloaded(title):
-    entries = open("history.txt", "r").read().splitlines()
-    return title in entries
-
-
 def get_show_information(title):
     return guessit(title)
 
+
+# Creates a beautifulsoup object for an url
+def beautiful_soup(raw_url):
+    page = requests.get(raw_url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    return soup
 
 

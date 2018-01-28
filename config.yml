@@ -11,5 +11,10 @@ RMZ_Shows:
     shows:
       - Wilderness Vet
       - The Voyager with Josh Garcia
+      - Chicago Fire
     quality: 720p
     downloadfolder: /share/Web/temp/TV-Shows
+CRE:
+    feed: "http://cre.fm/feed/m4a/"
+    downloadfolder: /share/Web/temp/Audio/cre
+
