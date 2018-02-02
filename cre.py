@@ -28,6 +28,7 @@ def run():
         if not download_exists(identifier=podcast_title):
             create_crawljob_and_upload(jobname=podcast_title, link=raw_link, download_folder=download_folder)
             persist_download(identifier=podcast_title)
+            # print("Downloading" + podcast_title)
 
 
 if __name__ == "__main__":

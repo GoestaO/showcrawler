@@ -4,7 +4,7 @@ from utilities import read_config, get_show_information
 from bs4 import BeautifulSoup
 import urllib
 import requests
-from utilities import create_crawljob_and_upload, log_download, already_downloaded
+from utilities import create_crawljob_and_upload
 
 config = read_config(path_to_file="config.yml").get('Dokujunkies_Geschichtepolitik')
 link_list = []
