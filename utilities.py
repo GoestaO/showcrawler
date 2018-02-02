@@ -7,7 +7,6 @@ from guessit import guessit
 from bs4 import BeautifulSoup
 import requests
 
-home = str(Path.home())
 TEMP_FOLDER = "folderwatch"
 
 
