@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import feedparser
 from db import download_exists, persist_download
 from utilities import read_config, get_show_information

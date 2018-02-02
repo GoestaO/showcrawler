@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
+
 from utilities import *
-from guessit import guessit
 from db import download_exists, persist_download
 
 

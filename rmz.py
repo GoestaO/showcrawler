@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import feedparser
 import pprint
 from utilities import create_crawljob_and_upload, read_config, get_show_information
