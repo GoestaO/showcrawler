@@ -50,7 +50,7 @@ def download_exists(title: str, season: int, episode: int):
     return False
 
 
-def download_exists(identifier: str):
+def download_exists2(identifier: str):
     conn = sqlite3.connect(DB_FILENAME)
     cursor = conn.cursor()
     sql = "select * from download where identifier = '{}'".format(identifier)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from utilities import *
-from db import download_exists, persist_download
+from db import download_exists2, persist_download
 
 
 FEED_URL = "http://cre.fm/feed/m4a/"
@@ -26,7 +26,7 @@ def run():
 
     for raw_link in raw_links:
         podcast_title = parse_podcast_title_from_url(raw_link)
-        if not download_exists(identifier=podcast_title):
+        if not download_exists2(identifier=podcast_title):
             create_crawljob_and_upload(jobname=podcast_title, link=raw_link, download_folder=download_folder)
             persist_download(identifier=podcast_title)
             # print("Downloading" + podcast_title)
