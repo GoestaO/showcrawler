@@ -21,7 +21,7 @@ def persist_download(title, season, episode):
     conn.close()
 
 
-def persist_download(identifier: str):
+def persist_download2(identifier: str):
     conn = sqlite3.connect(DB_FILENAME)
     if not download_exists(identifier=identifier):
         sql = "INSERT INTO download(identifier, title, season, episode) VALUES ('{}', '{}', '{}', '{}')".format(
