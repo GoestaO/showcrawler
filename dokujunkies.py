@@ -6,9 +6,9 @@ from utilities import read_config, get_show_information
 from bs4 import BeautifulSoup
 import urllib
 import requests
-from utilities import create_crawljob_and_upload
+from utilities import create_crawljob_and_upload, CONFIG_FILE
 
-config = read_config(path_to_file="config.yml").get('Dokujunkies_Geschichtepolitik')
+config = read_config(path_to_file=CONFIG_FILE).get('Dokujunkies_Geschichtepolitik')
 link_list = []
 
 
@@ -89,7 +89,6 @@ def run():
 
     list(map(lambda x: filter_downloads(link_list=link_list, soup=beautiful_soup(x[0]), quality=quality, hoster=hoster),
              raw_urls))
-
 
     for entry in link_list:
         download_link = entry[0]

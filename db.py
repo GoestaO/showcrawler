@@ -1,7 +1,8 @@
 import os
 import sqlite3
+from utilities import DB_FILENAME
 
-DB_FILENAME = 'downloads.db'
+
 
 
 # def connect() -> sqlite3.Connection:

@@ -7,7 +7,12 @@ from guessit import guessit
 from bs4 import BeautifulSoup
 import requests
 
-TEMP_FOLDER = "folderwatch"
+
+CURRENT_FOLDER = os.path.dirname(os.path.realpath(__file__))
+WATCH_FOLDER = CURRENT_FOLDER + "/folderwatch"
+CONFIG_FILE = CURRENT_FOLDER + "/config.yml"
+FTP_CONFIG = CURRENT_FOLDER + "/ftp.yml"
+DB_FILENAME = CURRENT_FOLDER + '/downloads.db'
 
 
 def generate_absolute_path_mediaserver(folder):
@@ -21,7 +26,7 @@ def generate_download_folder(folder):
 
 
 def create_crawljob_and_upload(jobname: str, link: str, download_folder):
-    with open("{}/{}.crawljob".format(TEMP_FOLDER, jobname), "w") as f:
+    with open("{}/{}.crawljob".format(WATCH_FOLDER, jobname), "w") as f:
         f.write("text = {}\n".format(link))
         f.write("downloadFolder = {}\n".format(download_folder))
         f.write("enabled = TRUE\n")
@@ -41,7 +46,7 @@ def read_config(path_to_file: str):
 
 
 def push_file_to_ftp(file):
-    connection = read_config("ftp.yml").get('ftp_connection')
+    connection = read_config(FTP_CONFIG).get('ftp_connection')
     username = connection.get('username')
     f = open(file.name, 'rb')
     filename = os.path.basename(file.name)
@@ -53,7 +58,7 @@ def push_file_to_ftp(file):
 
 
 def push_files_to_ftp(folder: str, filelist: list):
-    connection = read_config("ftp.yml")
+    connection = read_config(FTP_CONFIG)
     srv = pysftp.Connection(host = connection.get('host'), username=connection.get('username'), password=connection.get('password'))
     with srv.cd(folder):  # chdir to public
         for file in filelist:
@@ -78,4 +83,7 @@ def beautiful_soup(raw_url):
     soup = BeautifulSoup(page.content, 'html.parser')
     return soup
 
+
+if __name__ == "__main__":
+    print(CONFIG_FILE)
 
