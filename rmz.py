@@ -2,6 +2,7 @@
 
 import feedparser
 import pprint
+import time
 from utilities import create_crawljob_and_upload, read_config, get_show_information
 from db import persist_download, download_exists
 from pathlib import Path
@@ -29,14 +30,15 @@ def filter_for_shows(entries, shows):
     return prefiltered_shows
 
 
-
-
 if __name__ == '__main__':
     d = feedparser.parse('http://rmz.cr/feed')
     download_folder = config.get('downloadfolder')
     quality = config.get('quality')
     shows = config.get('shows')
+    hoster = config.get('hoster')
     # Iterate through the entries and fetch the title and link, which is the relevant data
+    print('###################start################### ' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+
     for entry in d['entries']:
         raw_title = entry['title']
         link = entry['link']
@@ -53,13 +55,14 @@ if __name__ == '__main__':
                     season = show_info['season']
                     episode = show_info['episode']
                 screen_size = show_info['screen_size']
-                if show == title and quality == screen_size and not download_exists(title=title, season=season,
-                                                                                    episode=episode):
-
+                if show == title and quality == screen_size and hoster in raw_title and not download_exists(title=title,
+                                                                                                            season=season,
+                                                                                                            episode=episode):
                     # create crawljob and upload to server
                     create_crawljob_and_upload(jobname=show, link=link, download_folder=download_folder)
 
-                    #save download to avoid multiple downloads of the same file
+                    # save download to avoid multiple downloads of the same file
                     persist_download(title=title, season=season, episode=episode)
-
+                    print(show_info)
+    print('###################ende################### ' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
 
