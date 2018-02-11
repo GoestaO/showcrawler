@@ -9,9 +9,6 @@ from pathlib import Path
 from guessit import guessit
 from utilities import CURRENT_FOLDER, WATCH_FOLDER, CONFIG_FILE, FTP_CONFIG, DB_FILENAME, DB_FILENAME
 
-home = str(Path.home())
-WATCHED_FOLDER = "folderwatch"
-
 config = read_config(path_to_file=CONFIG_FILE).get('RMZ_Shows')
 
 
