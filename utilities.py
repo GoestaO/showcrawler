@@ -27,7 +27,6 @@ passwd = connection.get('password')
 port = connection.get('port')
 folder = connection.get('folderwatch')
 host = connection.get('host')
-port = connection.get('port')
 
 
 def generate_absolute_path_mediaserver(folder):

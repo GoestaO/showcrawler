@@ -9,66 +9,11 @@ Dokujunkies_Geschichtepolitik:
 RMZ_Shows:
     feed: "http://rmz.cr/feed"
     shows:
-      - This Is Not Happening
-      - Wheels
-      - Sesame Street
-      - Manhunt
-      - The Trade
-      - Bomb City
-      - The Brink
-      - Wheel of Fortune
-      - Celebrity Big Brother
-#      - 4 Blocks
-#      - American Dad
-#      - Archer
-#      - Atlanta
-#      - Ballers
-#      - Baskets
-#      - Better Call Saul
-#      - The Big Bang Theory
-#      - The blacklist
-#      - Bobs Burgers
-#      - Brooklyn Nine Nine
-#      - Bull
-#      - Deutschland 83
-#      - Elementary
-#      - Episodes
-#      - Fargo
-#      - Ghosted
-#      - The Good Doctor
-#      - The Good Place
-#      - The Grand Tour
-#      - Happy
-#      - How to Get Away with Murder
-#      - Its Always Sunny in Philadelphia
-#      - Kevin Can Wait
-#      - The Last Man On Earth
-#      - Lethal Weapon
-#      - Loudermilk
-#      - Man With A Plan
-#      - The Mick
-#      - The Middle
-#      - Modern Family
-#      - Mr Robot
-#      - New Girl
-#      - Rick and Morty
-#      - Shameless US
-#      - Shooter
-#      - Silicon Valley
-#      - The Simpsons
-#      - Snowfall
-#      - South Park
-#      - Speechless
-#      - StartUp 2016
-#      - The Tick 2016
-#      - True Detective
-#      - Veep
-#      - What Would Diplo Do
-#      - Wrecked
+      - The Tom And Jerry Show
+      - The Blacklist
     quality: 720p
     downloadfolder: /share/Web/temp/TV-Shows
-    hoster: UL
+    hoster: /OL
 CRE:
     feed: "http://cre.fm/feed/m4a/"
     downloadfolder: /share/Web/temp/Audio/cre
-

@@ -36,7 +36,9 @@ if __name__ == '__main__':
     # Iterate through the entries and fetch the title and link, which is the relevant data
     print('###################start################### ' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
 
-    for entry in d['entries']:
+    prefiltered_values = list(filter(lambda x: hoster in x.title and quality in x.title, d['entries']))
+
+    for entry in prefiltered_values:
         raw_title = entry['title']
         link = entry['link']
 
@@ -62,4 +64,3 @@ if __name__ == '__main__':
                     persist_download(title=title, season=season, episode=episode)
                     print(show_info)
     print('###################ende################### ' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-
