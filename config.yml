@@ -11,6 +11,7 @@ RMZ_Shows:
     shows:
       - The Tom And Jerry Show
       - The Blacklist
+      - Strike Back
     quality: 720p
     downloadfolder: /share/Web/temp/TV-Shows
     hoster: /OL

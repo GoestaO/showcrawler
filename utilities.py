@@ -27,7 +27,7 @@ passwd = connection.get('password')
 port = connection.get('port')
 folder = connection.get('folderwatch')
 host = connection.get('host')
-
+port = connection.get('port')
 
 def generate_absolute_path_mediaserver(folder):
     rootfolder = "/share/Web/temp/"
@@ -42,8 +42,8 @@ def get_ftp_connection(host, port, username, password):
         ftp.cwd(folder)
     except error_reply:
         print(error_reply)
-    finally:
-        ftp.quit()
+    # finally:
+    #     ftp.quit()
     return ftp
 
 
@@ -66,7 +66,6 @@ def create_crawljob_and_upload(jobname: str, link: str, download_folder):
 
 def push_file_to_ftp(file):
     connection = read_config(FTP_CONFIG).get('ftp_connection')
-    username = connection.get('username')
     f = open(file.name, 'rb')
     filename = os.path.basename(file.name)
     ftp = get_ftp_connection(host=host, port=port, username=username, password=passwd)
@@ -76,6 +75,7 @@ def push_file_to_ftp(file):
     except error_reply:
         print(error_reply)
     finally:
+        f.close()
         ftp.quit()
 
 def log_download(name: str):
