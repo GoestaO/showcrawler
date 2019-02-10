@@ -8,6 +8,8 @@ from db import persist_download, download_exists
 from pathlib import Path
 from guessit import guessit
 from utilities import CURRENT_FOLDER, WATCH_FOLDER, CONFIG_FILE, FTP_CONFIG, DB_FILENAME, DB_FILENAME
+from bs4 import BeautifulSoup
+import requests
 
 config = read_config(path_to_file=CONFIG_FILE).get('RMZ_Shows')
 
@@ -26,6 +28,18 @@ def filter_for_shows(entries, shows):
     prefiltered_shows = list(filter(lambda x: x in entries, shows))
     return prefiltered_shows
 
+def filter_link(link, hoster):
+    page = requests.get(link)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    link_container = soup.findAll("div", {"class": "blog-details clear"})
+    links = list(map(lambda row: row.find_all("pre", class_="links"), link_container))
+    flat_list = [item for sublist in links for item in sublist]
+    print(flat_list)
+    filteredLinks = list(filter(lambda entry: hoster in entry.string, flat_list))
+    if(len(filteredLinks) > 0):
+        return filteredLinks[0]
+    return None
+
 
 if __name__ == '__main__':
     d = feedparser.parse('http://rmz.cr/feed')
@@ -41,6 +55,7 @@ if __name__ == '__main__':
     for entry in prefiltered_values:
         raw_title = entry['title']
         link = entry['link']
+        filteredLink = filter_link(link, hoster)
 
         # Fetch show infos from the guessit library
         show_info = get_show_information(raw_title)
@@ -56,9 +71,9 @@ if __name__ == '__main__':
                 screen_size = show_info['screen_size']
                 if show == title and quality == screen_size and hoster in raw_title and not download_exists(title=title,
                                                                                                             season=season,
-                                                                                                            episode=episode):
+                                                                                                        episode=episode) and filteredLink is not None:
                     # create crawljob and upload to server
-                    create_crawljob_and_upload(jobname=show, link=link, download_folder=download_folder)
+                    create_crawljob_and_upload(jobname=show, link=filteredLink, download_folder=download_folder)
 
                     # save download to avoid multiple downloads of the same file
                     persist_download(title=title, season=season, episode=episode)
